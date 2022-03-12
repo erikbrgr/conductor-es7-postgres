@@ -1,0 +1,12 @@
+diff --git a/postgres-persistence/src/main/java/com/netflix/conductor/postgres/config/PostgresConfiguration.java b/postgres-persistence/src/main/java/com/netflix/conductor/postgres/config/PostgresConfiguration.java
+index c1b9e53..5e05a2d 100644
+--- a/postgres-persistence/src/main/java/com/netflix/conductor/postgres/config/PostgresConfiguration.java
++++ b/postgres-persistence/src/main/java/com/netflix/conductor/postgres/config/PostgresConfiguration.java
+@@ -49,7 +49,6 @@ public class PostgresConfiguration {
+     public Flyway flywayForPrimaryDb() {
+         return Flyway.configure()
+                 .locations("classpath:db/migration_postgres")
+-                .schemas("public")
+                 .dataSource(dataSource)
+                 .baselineOnMigrate(true)
+                 .load();

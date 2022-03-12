@@ -1,0 +1,10 @@
+version: '2.3'
+
+services:
+  conductor-server:
+    environment:
+      - CONFIG_PROP=config-postgres.properties
+      - ELASTICSEARCH_URL=http://es:9200
+      - POSTGRES_ADDRPORT=host.docker.internal:5432/db06
+      - DB_USER=daconductor_owner
+      - DB_PASSWORD=daconductor_owner

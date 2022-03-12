@@ -1,0 +1,4 @@
+.vscode/
+
+# prevent accidentally checking in conductor
+conductor
