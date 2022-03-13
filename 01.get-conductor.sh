@@ -13,7 +13,7 @@ git clone -c advice.detachedHead=false -c core.autocrlf=false --depth 1 -b ${CON
 
 cd conductor/
 
-# Delete .lock files
+# Delete dependencies.lock files
 rm -f **/dependencies.lock
 
 # Apply patches

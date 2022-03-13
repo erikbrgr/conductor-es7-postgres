@@ -12,7 +12,7 @@ export config_file=
 
 if [ -z "$CONFIG_PROP" ];
   then
-    echo "Using an in-memory instance of conductor";
+    echo "CONFIG_PROP not set. Using an in-memory instance of conductor";
     export config_file=/app/config/config-local.properties
   else
     echo "Using $CONFIG_PROP";

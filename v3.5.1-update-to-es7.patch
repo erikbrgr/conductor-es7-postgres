@@ -12,7 +12,7 @@ index 6e7ea49..5e951a8 100644
  allprojects {
      apply plugin: 'nebula.netflixoss'
 diff --git a/docker/docker-compose.yaml b/docker/docker-compose.yaml
-index 8b665b0..903d866 100644
+index 8b665b0..154ed5d 100644
 --- a/docker/docker-compose.yaml
 +++ b/docker/docker-compose.yaml
 @@ -44,7 +44,7 @@ services:
@@ -77,14 +77,25 @@ index 28911ab..dda2bd3 100644
      testImplementation project(':conductor-client')
      testImplementation project(':conductor-grpc-client')
 diff --git a/test-harness/src/test/java/com/netflix/conductor/test/integration/AbstractEndToEndTest.java b/test-harness/src/test/java/com/netflix/conductor/test/integration/AbstractEndToEndTest.java
-index 3feeafe..ec28a20 100644
+index 3feeafe..9205e21 100644
 --- a/test-harness/src/test/java/com/netflix/conductor/test/integration/AbstractEndToEndTest.java
 +++ b/test-harness/src/test/java/com/netflix/conductor/test/integration/AbstractEndToEndTest.java
-@@ -62,7 +62,7 @@ public abstract class AbstractEndToEndTest {
+@@ -48,7 +48,7 @@ import static org.junit.Assert.assertFalse;
+ import static org.junit.Assert.assertNotNull;
+ 
+ @TestPropertySource(
+-        properties = {"conductor.indexing.enabled=true", "conductor.elasticsearch.version=6"})
++        properties = {"conductor.indexing.enabled=true", "conductor.elasticsearch.version=7"})
+ public abstract class AbstractEndToEndTest {
+ 
+     private static final Logger log = LoggerFactory.getLogger(AbstractEndToEndTest.class);
+@@ -61,8 +61,8 @@ public abstract class AbstractEndToEndTest {
+ 
      private static final ElasticsearchContainer container =
              new ElasticsearchContainer(
-                     DockerImageName.parse("docker.elastic.co/elasticsearch/elasticsearch-oss")
+-                    DockerImageName.parse("docker.elastic.co/elasticsearch/elasticsearch-oss")
 -                            .withTag("6.8.12")); // this should match the client version
++                    DockerImageName.parse("docker.elastic.co/elasticsearch/elasticsearch")
 +                            .withTag("7.17.1")); // this should match the client version
  
      private static RestClient restClient;
