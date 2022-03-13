@@ -1,26 +1,13 @@
-# Da Conductor
+Contains the scripts to confgure Netflix Conductor to use Elasticsearch 7 and a local instance of PostgreSQL. 
 
-Contains the [Netflix Conductor](https://github.com/Netflix/conductor) instance for the Data Analytics DWH project.
+Details on the implementation can be found in the article Running Netflix Conductor 3 in Docker using Elasticsearch 7 and PostgreSQL on Medium.
 
-### Components
+### Component versions
 
 | Component | Version |
 |--|--|
 | Conductor | 3.5.1 |
 | Elasticsearch | 7.17.1 |
-
-
-### Database
-
-| | |
-|--|--|
-| Database | db06 |
-| Schema |   daconductor |
-| Username | daconductor_owner |
-
-The `database` folder contains the create script (`dba-createapp-db.sh`) to create the tablespace, schema and users. This can be used to create a local instance of the `daconductor` schema. Running the script without setting the `DB_ENV` environment assumes you want to create the database locally.
-
-> [This link](https://git02.mgt.lan/data-analytics/docs/-/blob/master/database.md) describes how to set up a local PostgreSQL database matching the configuration on the different environments.
 
 ### How to run locally
 
