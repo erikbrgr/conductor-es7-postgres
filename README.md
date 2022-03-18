@@ -1,6 +1,6 @@
 Contains the scripts to confgure Netflix Conductor to use Elasticsearch 7 and a local instance of PostgreSQL. 
 
-Details on the implementation can be found in the article Running Netflix Conductor 3 in Docker using Elasticsearch 7 and PostgreSQL on Medium.
+Details on the implementation can be found in the article [Running Netflix Conductor 3 in Docker using Elasticsearch 7 and PostgreSQL](https://betterprogramming.pub/running-netflix-conductor-3-in-docker-using-elasticsearch-7-and-postgresql-b415988dd74a) on Medium.
 
 ### Component versions
 
