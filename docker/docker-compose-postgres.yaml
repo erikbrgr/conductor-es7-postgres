@@ -7,6 +7,7 @@ services:
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=conductor
     ports:
       - '5432:5432'
     volumes: 
@@ -20,7 +21,7 @@ services:
     environment:
       - CONFIG_PROP=config-postgres.properties
       - ELASTICSEARCH_URL=http://es:9200
-      - POSTGRES_ADDRPORT=postgres:5432/db06
+      - POSTGRES_ADDRPORT=postgres:5432/conductor
       - DB_USER=postgres
       - DB_PASSWORD=postgres
 

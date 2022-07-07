@@ -4,9 +4,11 @@
 set -ex 
 
 # Copy config and startup files
-cp -rv docker/config/ conductor/docker/server/
-cp -rv docker/bin/ conductor/docker/server/
+rm -rf conductor/docker/server/config
+rm -rf conductor/docker/server/bin
 
+cp -rv docker/config/ conductor/docker/server/config/
+cp -rv docker/bin/ conductor/docker/server/bin/
 cd conductor/docker
 
 # Build Conductor Server

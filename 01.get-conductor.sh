@@ -17,6 +17,9 @@ cd conductor/
 rm -f **/dependencies.lock
 rm -f ./dependencies.lock
 
+# Delete es6-persistence
+rm -r es6-persistence
+
 # Apply patches
 # Update to es7
 git apply ../${CONDUCTOR_VERSION}-update-to-es7.patch

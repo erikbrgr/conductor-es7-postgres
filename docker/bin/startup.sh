@@ -2,6 +2,8 @@
 
 # startup.sh - startup script for the server docker image
 
+echo "Automatically injected to running container
+"
 echo "Starting Conductor server"
 
 # Start the server
