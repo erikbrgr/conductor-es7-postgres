@@ -1,6 +1,6 @@
 #!/bin/sh
 
-CONDUCTOR_VERSION=v3.5.1
+CONDUCTOR_VERSION=v3.9.2
 
 # Display commands and exit on error
 set -ex 
@@ -15,15 +15,16 @@ cd conductor/
 
 # Delete dependencies.lock files
 rm -f **/dependencies.lock
+rm -f ./dependencies.lock
 
 # Apply patches
 # Update to es7
 git apply ../${CONDUCTOR_VERSION}-update-to-es7.patch
-# Set ownerEmailMandatory to false
+#### Set ownerEmailMandatory to false
 git apply ../${CONDUCTOR_VERSION}-ownerEmailmandatory-to-false.patch
-# Remove .schemas() call to prevent the currentSchema property in the Postgres connection string being overridden
-git apply ../${CONDUCTOR_VERSION}-fix-currentSchema-override.patch
-# Update colors so we can distinguish between IN_PROGRESS and SCHEDULED tasks
-git apply ../${CONDUCTOR_VERSION}-update-colors.patch
-# "Clean" changes made by patches so, if we make new changes, we can easily create another patch
+#### Remove .schemas() call to prevent the currentSchema property in the Postgres connection string being overridden
+###git apply ../${CONDUCTOR_VERSION}-fix-currentSchema-override.patch
+#### Update colors so we can distinguish between IN_PROGRESS and SCHEDULED tasks
+###git apply ../${CONDUCTOR_VERSION}-update-colors.patch
+#### "Clean" changes made by patches so, if we make new changes, we can easily create another patch
 git commit -a -m "Applied patches"

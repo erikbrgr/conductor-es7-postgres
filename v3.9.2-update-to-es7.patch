@@ -1,0 +1,100 @@
+diff --git a/dependencies.gradle b/dependencies.gradle
+index 7f49e20..7a9aa96 100644
+--- a/dependencies.gradle
++++ b/dependencies.gradle
+@@ -23,7 +23,7 @@ ext {
+     revCassandraUnit = '3.11.2.0'
+     revCommonsIo = '2.7'
+     revDynoQueues = '2.0.20'
+-    revElasticSearch6 = '6.8.12'
++    revElasticSearch7 = '7.10.2'
+     revEmbeddedRedis = '0.6'
+     revEurekaClient = '1.10.10'
+     revGroovy = '2.5.13'
+diff --git a/docker/docker-compose.yaml b/docker/docker-compose.yaml
+index 8b665b0..d369012 100644
+--- a/docker/docker-compose.yaml
++++ b/docker/docker-compose.yaml
+@@ -44,7 +44,7 @@ services:
+     stdin_open: true
+ 
+   elasticsearch:
+-    image: elasticsearch:6.8.15
++    image: docker.elastic.co/elasticsearch/elasticsearch:7.10.2
+     environment:
+       - "ES_JAVA_OPTS=-Xms512m -Xmx1024m"
+       - transport.host=0.0.0.0
+diff --git a/server/build.gradle b/server/build.gradle
+index 5a91830..90510fa 100644
+--- a/server/build.gradle
++++ b/server/build.gradle
+@@ -21,7 +21,7 @@ dependencies {
+     implementation project(':conductor-core')
+     implementation project(':conductor-redis-persistence')
+     implementation project(':conductor-cassandra-persistence')
+-    implementation project(':conductor-es6-persistence')
++
+     implementation project(':conductor-grpc-server')
+     implementation project(':conductor-redis-lock')
+     implementation project(':conductor-redis-concurrency-limit')
+@@ -43,6 +43,10 @@ dependencies {
+     implementation "org.springdoc:springdoc-openapi-ui:${revOpenapi}"
+ 
+     runtimeOnly "org.glassfish.jaxb:jaxb-runtime:${revJAXB}"
++    // automatically added by patch for es7
++    implementation 'com.netflix.conductor:conductor-es7-persistence:3.9.2'
++    // automatically added by patch for postgres
++    implementation 'com.netflix.conductor:conductor-postgres-persistence:3.8.3'
+ 
+     testImplementation project(':conductor-rest')
+     testImplementation project(':conductor-common')
+diff --git a/server/src/main/resources/application.properties b/server/src/main/resources/application.properties
+index 4ffb2cd..d9341ff 100644
+--- a/server/src/main/resources/application.properties
++++ b/server/src/main/resources/application.properties
+@@ -16,7 +16,7 @@ springdoc.api-docs.path=/api-docs
+ 
+ conductor.db.type=memory
+ 
+-conductor.indexing.enabled=false
++conductor.indexing.enabled=true
+ 
+ #Redis configuration details.
+ #format is host:port:rack separated by semicolon
+@@ -54,8 +54,8 @@ conductor.elasticsearch.url=localhost:9300
+ conductor.elasticsearch.indexName=conductor
+ 
+ #Elasticsearch major release version.
+-conductor.elasticsearch.version=6
+-#conductor.elasticsearch.version=7
++#conductor.elasticsearch.version=6
++conductor.elasticsearch.version=7
+ 
+ # Default event queue type to listen on for wait task
+ conductor.default-event-queue.type=sqs
+diff --git a/springboot-bom-overrides.gradle b/springboot-bom-overrides.gradle
+index 3385358..54d47da 100644
+--- a/springboot-bom-overrides.gradle
++++ b/springboot-bom-overrides.gradle
+@@ -15,7 +15,7 @@
+ // Dependency version override properties can be found at https://docs.spring.io/spring-boot/docs/2.6.7/reference/htmlsingle/#appendix.dependency-versions.properties
+ 
+ // Conductor's default is ES6, but SB brings in ES7
+-ext['elasticsearch.version'] = revElasticSearch6
++ext['elasticsearch.version'] = revElasticSearch7
+ 
+ // SB brings groovy 3.0.x which is not compatible with Spock
+ ext['groovy.version'] = revGroovy
+diff --git a/test-harness/build.gradle b/test-harness/build.gradle
+index 2047acf..51d03b6 100644
+--- a/test-harness/build.gradle
++++ b/test-harness/build.gradle
+@@ -7,7 +7,7 @@ dependencies {
+     testImplementation project(':conductor-core')
+     testImplementation project(':conductor-redis-persistence')
+     testImplementation project(':conductor-cassandra-persistence')
+-    testImplementation project(':conductor-es6-persistence')
++    //testImplementation project(':conductor-es6-persistence')
+     testImplementation project(':conductor-grpc-server')
+     testImplementation project(':conductor-client')
+     testImplementation project(':conductor-grpc-client')
