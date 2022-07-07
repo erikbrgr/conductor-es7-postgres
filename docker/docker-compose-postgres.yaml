@@ -1,10 +1,29 @@
 version: '2.3'
 
 services:
+  postgres:
+    image: postgres:14.1-alpine
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - '5432:5432'
+    volumes: 
+      - db:/var/lib/postgresql/data
+    networks:
+      - internal
+
   conductor-server:
+    depends_on:
+      - postgres
     environment:
       - CONFIG_PROP=config-postgres.properties
       - ELASTICSEARCH_URL=http://es:9200
-      - POSTGRES_ADDRPORT=host.docker.internal:5432/db06
-      - DB_USER=daconductor_owner
-      - DB_PASSWORD=daconductor_owner
+      - POSTGRES_ADDRPORT=postgres:5432/db06
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+
+volumes:
+  db:
+    driver: local 
