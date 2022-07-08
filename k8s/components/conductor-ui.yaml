@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: conductor-ui
+  namespace: conductor
+  labels:
+    app: conductor-ui
+spec:
+  selector:
+    matchLabels:
+      app: conductor-ui
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: conductor-ui
+    spec:
+      containers:
+        - name: conductor-ui
+          #image: conductor-ui
+          image: 302212680347.dkr.ecr.us-east-1.amazonaws.com/conductor-ui
+          env:
+            - name: WF_SERVER
+              value: "http://conductor-server.conductor.svc.cluster.local:8080/api/"
+          ports:
+            - containerPort: 5000
+              name: conductor-ui
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: conductor-ui
+spec:
+  ports:
+    - port: 80
+      targetPort: 5000
+      protocol: TCP
+  type: NodePort
+  selector:
+    app: conductor-ui
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  namespace: conductor
+  name: conductor-web-ui-ingress
+  annotations:
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: instance
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: conductor-ui
+                port:
+                  number: 80

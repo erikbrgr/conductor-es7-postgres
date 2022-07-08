@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "conductor-server.fullname" . }}-server-db-config
+  labels:
+  {{- include "conductor-server.labels" . | nindent 4 }}
+data:
+  config-postgres.properties: |
+    conductor.grpc-server.enabled={{ .Values.serverDbConfig.configPostgresProperties.conductor.grpcServer.enabled | quote }}
+    conductor.db.type={{ .Values.serverDbConfig.configPostgresProperties.conductor.db.type }}
+    spring.datasource.url={{ .Values.serverDbConfig.configPostgresProperties.spring.datasource.url }}
+    spring.datasource.username={{ .Values.serverDbConfig.configPostgresProperties.spring.datasource.username }}
+    spring.datasource.password={{ .Values.serverDbConfig.configPostgresProperties.spring.datasource.password }}
+    spring.datasource.hikari.maximum-pool-size={{ .Values.serverDbConfig.configPostgresProperties.spring.datasource.hikari.maximumPoolSize }}
+    spring.datasource.hikari.minimum-idle={{ .Values.serverDbConfig.configPostgresProperties.spring.datasource.hikari.minimumIdle }}
+    conductor.indexing.enabled={{ .Values.serverDbConfig.configPostgresProperties.conductor.indexing.enabled | quote }}
+    conductor.elasticsearch.url={{ .Values.serverDbConfig.configPostgresProperties.conductor.elasticsearch.url }}
+    conductor.elasticsearch.indexName={{ .Values.serverDbConfig.configPostgresProperties.conductor.elasticsearch.indexName }}
+    conductor.elasticsearch.clusterHealthColor={{ .Values.serverDbConfig.configPostgresProperties.conductor.elasticsearch.clusterHealthColor }}
+    loadSample={{ .Values.serverDbConfig.configPostgresProperties.loadSample | quote }}

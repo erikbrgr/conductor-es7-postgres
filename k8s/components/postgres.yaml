@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: conductor-db
+  namespace: conductor
+spec:
+  selector:
+    matchLabels:
+      app: conductor-db
+  serviceName: "conductor-db"
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: conductor-db
+    spec:
+      containers:
+        - name: conductor-db
+          image: postgres:11
+          ports:
+            - containerPort: 5432
+              name: db
+          env:
+            - name: POSTGRES_USER
+              value: conductor
+            - name: POSTGRES_PASSWORD
+              value: conductor
+            - name: POSTGRES_DB
+              value: conductor
+            - name: PGDATA
+              value: /data/pgdata
+          volumeMounts:
+            - name: data
+              mountPath: /data
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        storageClassName: "gp2"
+        resources:
+          requests:
+            storage: 5Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: conductor-db
+  namespace: conductor
+spec:
+  selector:
+    app: conductor-db
+  type: ClusterIP
+  ports:
+    - name: conductor-db
+      protocol: TCP
+      port: 5432

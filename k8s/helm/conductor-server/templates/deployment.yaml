@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "conductor-server.fullname" . }}-conductor-server
+  labels:
+    app: conductor-server
+  {{- include "conductor-server.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.conductorServer.replicas }}
+  selector:
+    matchLabels:
+      app: conductor-server
+    {{- include "conductor-server.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        app: conductor-server
+      {{- include "conductor-server.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+      - args:
+        - /app/bootstrap.sh
+        command:
+        - /bin/bash
+        env:
+        - name: CONFIG_PROP
+          value: config-postgres.properties
+        - name: KUBERNETES_CLUSTER_DOMAIN
+          value: {{ .Values.kubernetesClusterDomain }}
+        image: {{ .Values.conductorServer.conductorServer.image.repository }}:{{ .Values.conductorServer.conductorServer.image.tag| default .Chart.AppVersion }}
+        imagePullPolicy: Always
+        name: conductor-server
+        ports:
+        - containerPort: 8080
+          name: http
+        resources: {{- toYaml .Values.conductorServer.conductorServer.resources | nindent 10 }}
+        volumeMounts:
+        - mountPath: /app/config/config-postgres.properties
+          name: db-config
+          subPath: config-postgres.properties
+        - mountPath: /app/bootstrap.sh
+          name: bootstrap
+          subPath: bootstrap.sh
+      restartPolicy: Always
+      volumes:
+      - configMap:
+          name: {{ include "conductor-server.fullname" . }}-server-db-config
+        name: db-config
+      - configMap:
+          name: {{ include "conductor-server.fullname" . }}-server-bootstrap
+        name: bootstrap

@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "conductor-server.fullname" . }}-server-bootstrap
+  labels:
+  {{- include "conductor-server.labels" . | nindent 4 }}
+data:
+  bootstrap.sh: {{ .Values.serverBootstrap.bootstrapSh | quote }}
