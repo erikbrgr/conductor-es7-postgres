@@ -64,7 +64,7 @@ data:
     # Database persistence type.
     conductor.db.type=postgres
 
-    spring.datasource.url=jdbc:postgresql://conductor-db.conductor.svc.cluster.local:5432/conductor
+    spring.datasource.url=jdbc:postgresql://postgres:5432/conductor
     spring.datasource.username=conductor
     spring.datasource.password=conductor
 
@@ -76,7 +76,7 @@ data:
     conductor.indexing.enabled=true
 
     # Transport address to elasticsearch
-    conductor.elasticsearch.url=http://elasticsearch.conductor.svc.cluster.local:9200
+    conductor.elasticsearch.url=http://es:9200
 
     # Name of the elasticsearch cluster
     conductor.elasticsearch.indexName=conductor

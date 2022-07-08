@@ -17,8 +17,7 @@ spec:
     spec:
       containers:
         - name: conductor-ui
-          #image: conductor-ui
-          image: 302212680347.dkr.ecr.us-east-1.amazonaws.com/conductor-ui
+          image: conductor-ui
           env:
             - name: WF_SERVER
               value: "http://conductor-server.conductor.svc.cluster.local:8080/api/"
