@@ -1,10 +1,8 @@
 conductorServer:
   conductorServer:
     image:
-      #repository: conductor
-      repository: 242346083784.dkr.ecr.us-east-1.amazonaws.com/conductor 
-        #tag: server
-      tag: server-3.9.2-3
+      repository: conductor
+      tag: server
     resources:
       limits:
         cpu: "0.5"
