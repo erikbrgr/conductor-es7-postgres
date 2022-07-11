@@ -6,8 +6,9 @@ Details on the implementation can be found in the article [Running Netflix Condu
 
 | Component | Version |
 |--|--|
-| Conductor | 3.5.1 |
-| Elasticsearch | 7.17.1 |
+| Conductor | 3.9.2 |
+| Elasticsearch | 7.10.2 (Opensearch 1.2) 
+| Postgresql | 11 |
 
 ### How to run locally
 
@@ -27,3 +28,8 @@ The files `docker-compose.yaml` and `docker-compose-postgres.yaml` define the re
 `Ctrl+c` will exit docker compose.
 
 To ensure images are stopped and removed, execute: `docker-compose down`.
+
+### How to run on Kubernetes
+
+To run using bare kubernetes cli, use the `components` directory YAML files and apply them to your cluster.
+To run using Helm, `cd` to the helm directory and run: `helm install conductor-server conductor-server --namespace conductor` 
