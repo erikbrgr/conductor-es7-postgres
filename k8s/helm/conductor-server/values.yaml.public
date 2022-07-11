@@ -1,8 +1,10 @@
 conductorServer:
   conductorServer:
     image:
-      repository: conductor
-      tag: server
+      #repository: conductor
+      repository: 242346083784.dkr.ecr.us-east-1.amazonaws.com/conductor 
+        #tag: server
+      tag: server-3.9.2-3
     resources:
       limits:
         cpu: "0.5"
@@ -17,33 +19,14 @@ conductorServer:
     targetPort: 0
   replicas: 1
   type: ClusterIP
-kubernetesClusterDomain: cluster.local
-serverBootstrap:
-  bootstrapSh: |
-    #!/bin/bash
-    mkdir -p /app/logs
-    touch /app/logs/server.log
-    /app/startup.sh & tail -f /app/logs/server.log
 
-serverDbConfig:
-  configPostgresProperties:
-    conductor:
-      db:
-        type: postgres
-      elasticsearch:
-        clusterHealthColor: yellow
-        indexName: conductor
-        url: http://es:9200
-      grpcServer:
-        enabled: "false"
-      indexing:
-        enabled: "true"
-    loadSample: "false"
-    spring:
-      datasource:
-        hikari:
-          maximumPoolSize: "10"
-          minimumIdle: "2"
-        password: conductor
-        url: jdbc:postgresql://postgres:5432/conductor
-        username: conductor
+kubernetesClusterDomain: cluster.local
+
+secrets:
+  db_user: "conductor"
+  db_password: "conductor"
+
+envs:
+  config_prop: "initcontainer.properties"
+  elasticsearch_url: "https://es:9200"
+  postgres_addrport: "conductor-db.conductor.svc.cluster.local:5432/conductor"
