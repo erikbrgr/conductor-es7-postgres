@@ -10,4 +10,4 @@ spec:
     app: conductor-server
   {{- include "conductor-server.selectorLabels" . | nindent 4 }}
   ports:
-	{{- .Values.conductorServer.ports | toYaml | nindent 2 -}}
+  {{- .Values.conductorServer.ports | toYaml | nindent 2 -}}
