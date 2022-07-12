@@ -31,5 +31,5 @@ To ensure images are stopped and removed, execute: `docker-compose down`.
 
 ### How to run on Kubernetes
 
-To run using bare kubernetes cli, use the `components` directory YAML files and apply them to your cluster.
-To run using Helm, `cd` to the helm directory and run: `helm install conductor-server conductor-server --namespace conductor` 
+To run using bare kubernetes cli, use the `k8s/components` directory YAML files and apply them to your cluster.
+To run using Helm, `cd` to the `k8s/helm` directory and run, change `values.yaml.public` to be `values.yaml` and define your settings, then run: `helm install conductor-server conductor-server --namespace conductor` 
