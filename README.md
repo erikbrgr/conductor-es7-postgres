@@ -12,6 +12,8 @@ Details on the implementation can be found in the article [Running Netflix Condu
 
 ### How to run locally
 
+NOTE: Building of images on MacOS with M1 processors that users the Docker platform of linux/aarm64 result in broken images. It is therefore advised to build the server/ui images on a Linux machine. To run the docker-compose on your M1, it is mandatory to set `export DOCKER_DEFAULT_PLATFORM=linux/amd64` if you've built the images on Linux (so actually there is no other way effectively other than to build on Linux) on your terminal. Unset this envvar if you wish to continue building and consuming Docker images that are not native to your M1 MacOS.
+
 From the root directory:
 
 1. Run `01.get-conductor.sh`. This will download the correct version of Conductor from GitHub and apply patches.
