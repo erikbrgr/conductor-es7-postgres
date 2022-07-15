@@ -25,17 +25,12 @@ echo "REDIS_MODE:        $REDIS_MODE"
 echo "REDIS_ZONE1:       $REDIS_ZONE1"
 echo "REDIS_USE_SSL:     $REDIS_USE_SSL"
 
-output_file="injected.properties"
-cp $config_file $output_file
-sed -i "s;##ELASTICSEARCH_URL##;$ELASTICSEARCH_URL;" $output_file
-sed -i "s;##REDIS_ADDRPORT##;$REDIS_ADDRPORT;" $output_file 
-sed -i "s;##DB_PASSWORD##;$DB_PASSWORD;" $output_file
-sed -i "s;##REDIS_MODE##;$REDIS_MODE;" $output_file
-sed -i "s;##REDIS_ZONE1##;$REDIS_ZONE1;" $output_file
-sed -i "s;##REDIS_USE_SSL##;$REDIS_USE_SSL;" $output_file
+sed -i "s;##ELASTICSEARCH_URL##;$ELASTICSEARCH_URL;" $config_file
+sed -i "s;##REDIS_ADDRPORT##;$REDIS_ADDRPORT;" $config_file 
+sed -i "s;##DB_PASSWORD##;$DB_PASSWORD;" $config_file
+sed -i "s;##REDIS_MODE##;$REDIS_MODE;" $config_file
+sed -i "s;##REDIS_ZONE1##;$REDIS_ZONE1;" $config_file
+sed -i "s;##REDIS_USE_SSL##;$REDIS_USE_SSL;" $config_file
 
 echo "Using java options config: $JAVA_OPTS"
-echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
-cat $output_file
-echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
-java ${JAVA_OPTS} -jar -DCONDUCTOR_CONFIG_FILE=$output_file conductor-server-*-boot.jar 2>&1 | tee -a /app/logs/server.log
+java ${JAVA_OPTS} -jar -DCONDUCTOR_CONFIG_FILE=$config_file conductor-server-*-boot.jar 2>&1 | tee -a /app/logs/server.log
