@@ -1,0 +1,32 @@
+version: '2.3'
+
+services:
+  redis:
+    image: redis:6.2-alpine
+    command: redis-server --requirepass sOmE_sEcUrE_pAsS --loglevel warning
+    ports:
+    - 6379:6379
+    volumes:
+    - db:/data
+    networks:
+    - internal
+    environment:
+     - REDIS_REPLICATION_MODE=master
+
+  conductor-server:
+    volumes:
+      - $PWD/docker/bin/startup-redis.sh:/app/config/startup.sh
+    depends_on:
+      - redis
+    environment:
+      - CONFIG_PROP=config-redis.properties
+      - ELASTICSEARCH_URL=http://es:9200
+      - DB_PASSWORD=sOmE_sEcUrE_pAsS
+      - REDIS_ADDRPORT=redis:6379
+      - REDIS_MODE=redis_standalone
+      - REDIS_ZONE1=us-east-1c
+      - REDIS_USE_SSL=false
+
+volumes:
+  db:
+    driver: local 

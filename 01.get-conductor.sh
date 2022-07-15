@@ -1,6 +1,6 @@
 #!/bin/sh
 
-CONDUCTOR_VERSION=v3.9.2
+CONDUCTOR_VERSION=v3.10.0
 
 # Display commands and exit on error
 set -ex 
@@ -22,8 +22,8 @@ rm -r es6-persistence
 
 # Apply patches
 # Update to es7
-git apply ../${CONDUCTOR_VERSION}-update-to-es7.patch
+git apply ../${CONDUCTOR_VERSION}/persistence_index.patch
 #### Set ownerEmailMandatory to false
-git apply ../${CONDUCTOR_VERSION}-ownerEmailmandatory-to-false.patch
+git apply ../${CONDUCTOR_VERSION}/ownerEmailmandatory-to-false.patch
 #### "Clean" changes made by patches so, if we make new changes, we can easily create another patch
 git commit -a -m "Applied patches"
