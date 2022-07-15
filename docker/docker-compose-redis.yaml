@@ -15,12 +15,14 @@ services:
 
   conductor-server:
     volumes:
-      - $PWD/docker/bin/startup-redis.sh:/app/config/startup.sh
+      - $PWD/docker/bin/startup-redis.sh:/app/startup.sh
+      - $PWD/docker/config/config-redis.properties:/app/config/injected.properties
     depends_on:
       - redis
     environment:
-      - CONFIG_PROP=config-redis.properties
-      - ELASTICSEARCH_URL=http://es:9200
+      # CONFIG_PROP file name should be equal to the one defined in the volumes
+      - CONFIG_PROP=injected.properties
+      - ELASTICSEARCH_URL=http://elasticsearch:9200
       - DB_PASSWORD=sOmE_sEcUrE_pAsS
       - REDIS_ADDRPORT=redis:6379
       - REDIS_MODE=redis_standalone

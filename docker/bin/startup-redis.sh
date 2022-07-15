@@ -8,6 +8,8 @@ echo "Starting Conductor server"
 cd /app/libs
 echo "Property file: $CONFIG_PROP"
 echo $CONFIG_PROP
+echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+cat $CONFIG_PROP
 export config_file=
 
 if [ -z "$CONFIG_PROP" ];

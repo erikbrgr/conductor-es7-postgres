@@ -1,0 +1,13 @@
+diff --git a/core/src/main/java/com/netflix/conductor/core/config/ConductorProperties.java b/core/src/main/java/com/netflix/conductor/core/config/ConductorProperties.java
+index b223008..71ee26d 100644
+--- a/core/src/main/java/com/netflix/conductor/core/config/ConductorProperties.java
++++ b/core/src/main/java/com/netflix/conductor/core/config/ConductorProperties.java
+@@ -130,7 +130,7 @@ public class ConductorProperties {
+      * Used to control the validation for owner email field as mandatory within workflow and task
+      * definitions.
+      */
+-    private boolean ownerEmailMandatory = true;
++    private boolean ownerEmailMandatory = false;
+ 
+     /**
+      * The number of threads to be usde in Scheduler used for polling events from multiple event

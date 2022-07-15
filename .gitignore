@@ -1,7 +1,7 @@
 .vscode/
 
 # prevent accidentally checking in conductor
-conductor
+conductor-*
 **/values.yaml
 **/private.yaml
 **/private

@@ -2,8 +2,10 @@ version: '2.3'
 
 services:
   conductor-server:
+    command:
+      - /app/startup.sh
     environment:
-      - CONFIG_PROP=config-local.properties
+      - CONFIG_PROP=injected.properties
       - ELASTICSEARCH_URL=http://es:9200
     image: conductor:server
     networks:
@@ -25,6 +27,10 @@ services:
       options:
         max-size: "1k"
         max-file: "3"
+    volumes:
+      # mounting vanilla config and startup script
+      - $PWD/docker/bin/startup-local.sh:/app/startup.sh
+      - $PWD/docker/config/config-local.properties:/app/config/injected.properties
 
   conductor-ui:
     environment:
@@ -39,7 +45,7 @@ services:
     stdin_open: true
 
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.4
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.8.2
     environment:
       - "ES_JAVA_OPTS=-Xms512m -Xmx1024m"
       - transport.host=0.0.0.0

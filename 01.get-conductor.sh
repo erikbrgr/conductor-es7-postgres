@@ -1,24 +1,24 @@
 #!/bin/sh
 
-CONDUCTOR_VERSION=v3.10.0
-
 # Display commands and exit on error
 set -ex 
 
+die () {
+    echo >&2 "$@"
+    exit 1
+}
+
+[ "$#" -eq 1 ] || die "1 argument, specifying conductor tag in the format of vX.Y.Z is required, $# provided"
+
+CONDUCTOR_VERSION=$1
+
 # Remove the conductor folder so we start fresh
-rm -rf conductor/
+rm -rf ./conductor-$CONDUCTOR_VERSION
 
 # Get Conductor
-git clone -c advice.detachedHead=false -c core.autocrlf=false --depth 1 -b ${CONDUCTOR_VERSION} https://github.com/Netflix/conductor.git ./conductor
+git clone -c advice.detachedHead=false -c core.autocrlf=false --depth 1 -b ${CONDUCTOR_VERSION} https://github.com/Netflix/conductor.git ./conductor-$CONDUCTOR_VERSION
 
-cd conductor/
-
-# Delete dependencies.lock files
-rm -f **/dependencies.lock
-rm -f ./dependencies.lock
-
-# Delete es6-persistence
-rm -r es6-persistence
+cd ./conductor-$CONDUCTOR_VERSION
 
 # Apply patches
 # Update to es7
