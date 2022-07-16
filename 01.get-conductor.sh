@@ -28,4 +28,4 @@ git apply ../${CONDUCTOR_VERSION}/ownerEmailmandatory-to-false.patch
 #### "Clean" changes made by patches so, if we make new changes, we can easily create another patch
 git commit -a -m "Applied patches"
 
-cp -rf ../docker .
+cp -rf ../docker ./
