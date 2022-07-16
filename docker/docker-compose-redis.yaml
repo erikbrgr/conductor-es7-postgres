@@ -14,14 +14,13 @@ services:
      - REDIS_REPLICATION_MODE=master
 
   conductor-server:
+    image: conductor:server-redis
     volumes:
-      - $PWD/docker/bin/startup-redis.sh:/app/startup.sh
-      - $PWD/docker/config/config-redis.properties:/app/config/injected.properties
+      - $PWD/docker/config/config-redis.properties:/props/injected.properties
     depends_on:
       - redis
     environment:
-      # CONFIG_PROP file name should be equal to the one defined in the volumes
-      - CONFIG_PROP=injected.properties
+      - CONFIG_PROP=config-redis.properties
       - ELASTICSEARCH_URL=http://elasticsearch:9200
       - DB_PASSWORD=sOmE_sEcUrE_pAsS
       - REDIS_ADDRPORT=redis:6379

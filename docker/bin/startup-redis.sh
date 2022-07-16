@@ -19,6 +19,7 @@ if [ -z "$CONFIG_PROP" ];
     export config_file=/app/config/$CONFIG_PROP
 fi
 
+cp /props/injected.properties /app/config/$CONFIG_PROP
 echo "ELASTICSEARCH_URL: $ELASTICSEARCH_URL"
 echo "REDIS_ADDRPORT:    $REDIS_ADDRPORT"
 echo "REDIS_MODE:        $REDIS_MODE"

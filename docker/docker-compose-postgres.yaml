@@ -16,6 +16,9 @@ services:
       - internal
 
   conductor-server:
+    image: conductor:server-postres
+    volumes:
+      - $PWD/docker/config/config-postgres.properties:/props/injected.properties
     depends_on:
       - postgres
     environment:

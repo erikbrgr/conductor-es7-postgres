@@ -20,6 +20,7 @@ if [ -z "$CONFIG_PROP" ];
     export config_file=/app/config/$CONFIG_PROP
 fi
 
+cp /props/injected.properties /app/config/$CONFIG_PROP
 echo "ELASTICSEARCH_URL: $ELASTICSEARCH_URL"
 echo "POSTGRES_ADDRPORT: $POSTGRES_ADDRPORT"
 echo "DB_USER:           $DB_USER"

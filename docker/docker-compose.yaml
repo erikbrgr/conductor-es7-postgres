@@ -2,10 +2,8 @@ version: '2.3'
 
 services:
   conductor-server:
-    command:
-      - /app/startup.sh
     environment:
-      - CONFIG_PROP=injected.properties
+      - CONFIG_PROP=config-local.properties
       - ELASTICSEARCH_URL=http://es:9200
     image: conductor:server
     networks:
@@ -29,8 +27,7 @@ services:
         max-file: "3"
     volumes:
       # mounting vanilla config and startup script
-      - $PWD/docker/bin/startup-local.sh:/app/startup.sh
-      - $PWD/docker/config/config-local.properties:/app/config/injected.properties
+      - $PWD/docker/config/config-local.properties:/props/injected.properties
 
   conductor-ui:
     environment:
