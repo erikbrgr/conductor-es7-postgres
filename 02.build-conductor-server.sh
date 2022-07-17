@@ -24,4 +24,4 @@ echo "using $START_SCRIPT to build docker image"
 # Copy config and startup files
 cd conductor-$CONDUCTOR_VERSION/docker
 # Build Conductor Server
-docker build -t conductor:server-$START_TYPE -f server/Dockerfile --build-arg start_script=$START_SCRIPT ../
+docker build -t conductor-server-es6-$START_TYPE:$CONDUCTOR_VERSION -f server/Dockerfile --build-arg start_script=$START_SCRIPT ../

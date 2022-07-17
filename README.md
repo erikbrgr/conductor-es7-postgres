@@ -1,4 +1,7 @@
-Contains the scripts to confgure Netflix Conductor to use Elasticsearch 7 and a local instance of PostgreSQL. 
+Contains the scripts to confgure Netflix Conductor to use Elasticsearch 6 and a local instance of Redis6.
+
+This repo is a fork that was built to support ES7 and PostgreSQL. However, while trying to improve this repo in this fork, I found out that the community libraries that provide Postgres support are either broken or fail test and effectively are lagging behind the main project. I therefore decided to abandon the support for anything comming out of the conductor-community repo as I don't consider it "production grade" artifact.
+This repo does support switching (currently, between v3.9.2 to v3.10.0) condcutor versions and using either docker-compose Redis+ES6 or memory+w/o indexing. Additionally, we patch the conductor dockerfile so that it would use the Adoptium JDK/JRE 11 base images, unlike the original dockerfile that uses deprecated open-jdk/jre images.
 
 Details on the implementation can be found in the article [Running Netflix Conductor 3 in Docker using Elasticsearch 7 and PostgreSQL](https://betterprogramming.pub/running-netflix-conductor-3-in-docker-using-elasticsearch-7-and-postgresql-b415988dd74a) on Medium.
 
@@ -6,9 +9,9 @@ Details on the implementation can be found in the article [Running Netflix Condu
 
 | Component | Version |
 |--|--|
-| Conductor | 3.9.2 |
-| Elasticsearch | 7.10.2 (Opensearch 1.2) 
-| PostgreSQL | 11 |
+| Conductor | 3.9.2, 3.10.0 |
+| Elasticsearch | 6.8.15 (Opensearch 1.2) 
+| Redis | 6 |
 
 ### How to run locally
 
@@ -19,16 +22,16 @@ Unset this envvar if you wish to continue building and consuming Docker images t
 
 From the root directory:
 
-1. Run `01.get-conductor.sh`. This will download the correct version of Conductor from GitHub and apply patches.
-2. Run `02.build-conductor-server.sh`. This will copy the config files from the `docker/config` directory and build the Conductor Server image.
+1. Run `01.get-conductor.sh v3.10.0`. This will download the v3.10.0 version of Conductor from GitHub and apply patches.
+2. Run `02.build-conductor-server.sh v3.10.0 redis`. This will copy the config files from the `docker/config` directory, take the start-redis.sh script and put it under /app/startup.sh, and build the Conductor Server image corresponding to the name `conductor-server-redis:v3.10.0`.
 3. Run `03.build-conductor-ui.sh`. This will build the Conductor UI image.
-4. Run either `04.run-local.sh` or `04.run-local-postgres.sh`.
+4. Run either `04.run-local.sh` or `04.run-local-redis.sh`.
       
    `run-local` runs against an in-memory database, so data is lost when the server terminates. This configuration is useful for testing or demo only.
 
-   `run-local-postgres` runs Conductor against your local instance of PostgreSQL. On the PostgreSQL instance, you will need to initialize a user, password and create database for conductor to use
+   `run-local-redis` runs Conductor against your local instance of Redis6. On the Redis6 instance
 
-The files `docker-compose.yaml` and `docker-compose-postgres.yaml` define the required environment variables to connect to Elasticsearch and PostgreSQL.
+The files `docker-compose.yaml` and `docker-compose-redis.yaml` define the required environment variables to connect to Elasticsearch and PostgreSQL.
 
 `Ctrl+c` will exit docker compose.
 
@@ -38,8 +41,3 @@ To ensure images are stopped and removed, execute: `docker-compose down`.
 
 To run using bare kubernetes cli, use the `k8s/components` directory YAML files and apply them to your cluster.
 To run using Helm, `cd` to the `k8s/helm` directory and run, change `values.yaml.public` to be `values.yaml` and define your settings, then run: `helm install conductor-server conductor-server --namespace conductor` 
-
-### TODOs
-
-* For those wishing to use deployed Postgres server, there is a possibility create server init sql scripts that would initialize the conductor used user/passwd and create the conductor database
-
