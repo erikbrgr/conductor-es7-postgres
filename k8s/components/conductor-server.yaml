@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: conductor-server
-          image: 242346083784.dkr.ecr.us-east-1.amazonaws.com/conductor-server-es6-redis:v3.10.0
+          image: CHANGE_THIS_TO_YOUR_IMAGE 
           resources:
             requests:
               cpu: 2
