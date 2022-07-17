@@ -32,9 +32,9 @@ spec:
             secretKeyRef:
               name: redis-secret
               key: db_password 
-          volumeMounts:
-            - name: data
-              mountPath: /data
+        volumeMounts:
+        - name: data
+          mountPath: /data
   volumeClaimTemplates:
     - metadata:
         name: data
@@ -65,4 +65,4 @@ metadata:
   name: redis-secret 
 type: Opaque
 data:
-  db_password: NotAPassWordReally 
+  db_password: Tm90QVBhc3NXb3JkUmVhbGx5Cg==

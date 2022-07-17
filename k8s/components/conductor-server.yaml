@@ -31,72 +31,56 @@ spec:
             - /app/bootstrap.sh
           env:
             - name: CONFIG_PROP
-              value: "config-postgres.properties"
+              value: "config-redis.properties"
+            - name: ELASTICSEARCH_URL
+              value: "http://elasticsearch.conductor.svc.cluster.local:9200"
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: redis-secret
+                  key: db_password 
+            - name: REDIS_ADDRPORT
+              value: "redis.conductor.svc.cluster.local:6379"
+            - name: REDIS_MODE
+              value: redis_standalone
+            - name: REDIS_ZONE1
+              value: "1"
+            - name: REDIS_USE_SSL
+              value: "false"
           ports:
             - containerPort: 8080
               name: http
           volumeMounts:
-            - name: db-config
-              mountPath: /app/config/config-postgres.properties
-              subPath: config-postgres.properties
-            - name: bootstrap
-              mountPath: /app/bootstrap.sh
-              subPath: bootstrap.sh
+            - name: config-redis
+              mountPath: /props
+              subPath: injected.properties
       volumes:
-        - name: db-config
+        - name: config-redis 
           configMap:
-            name: server-db-config
-        - name: bootstrap
-          configMap:
-            name: server-bootstrap
+            name: config-redis 
       restartPolicy: Always
 ---
 kind: ConfigMap
 apiVersion: v1
 metadata:
-  name: server-db-config
+  name: config-redis
   namespace: conductor
 data:
-  config-postgres.properties: |
-    # Servers.
+  config-redis.properties: |
     conductor.grpc-server.enabled=false
-
-    # Database persistence type.
-    conductor.db.type=postgres
-
-    spring.datasource.url=jdbc:postgresql://postgres:5432/conductor
-    spring.datasource.username=conductor
-    spring.datasource.password=conductor
-
-    # Hikari pool sizes are -1 by default and prevent startup
-    spring.datasource.hikari.maximum-pool-size=10
-    spring.datasource.hikari.minimum-idle=2
-
-    # Elastic search instance indexing is enabled.
+    conductor.db.type=##REDIS_MODE##
+    workflow.dynomite.cluster.name=redis
+    conductor.redis.hosts=##REDIS_ADDRPORT##:##REDIS_ZONE1##:##DB_PASSWORD##
+    workflow.namespace.prefix=conductor
+    workflow.namespace.queue.prefix=conductor_queues
+    queues.dynomite.nonQuorum.port=6379
+    workflow.dynomite.cluster.hosts.useSSL=##REDIS_USE_SSL##
     conductor.indexing.enabled=true
-
-    # Transport address to elasticsearch
-    conductor.elasticsearch.url=http://es:9200
-
-    # Name of the elasticsearch cluster
+    conductor.elasticsearch.url=##ELASTICSEARCH_URL##
     conductor.elasticsearch.indexName=conductor
-
     conductor.elasticsearch.clusterHealthColor=yellow
-
-    # Load sample kitchen sink workflow
-    # loadSample=true
----
-kind: ConfigMap
-apiVersion: v1
-metadata:
-  name: server-bootstrap
-  namespace: conductor
-data:
-  bootstrap.sh: |
-    #!/bin/bash
-    mkdir -p /app/logs
-    touch /app/logs/server.log
-    /app/startup.sh & tail -f /app/logs/server.log
+    conductor.workflow-status-listener.type=stub
+    loadSample=true
 ---
 apiVersion: v1
 kind: Service
