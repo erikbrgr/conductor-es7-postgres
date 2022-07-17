@@ -1,9 +1,10 @@
 Contains the scripts to confgure Netflix Conductor to use Elasticsearch 6 and a local instance of Redis6.
 
-This repo is a fork that was built to support ES7 and PostgreSQL. However, while trying to improve this repo in this fork, I found out that the community libraries that provide Postgres support are either broken or fail test and effectively are lagging behind the main project. I therefore decided to abandon the support for anything comming out of the conductor-community repo as I don't consider it "production grade" artifact.
-This repo does support switching (currently, between v3.9.2 to v3.10.0) condcutor versions and using either docker-compose Redis+ES6 or memory+w/o indexing. Additionally, we patch the conductor dockerfile so that it would use the Adoptium JDK/JRE 11 base images, unlike the original dockerfile that uses deprecated open-jdk/jre images.
-
-Details on the implementation can be found in the article [Running Netflix Conductor 3 in Docker using Elasticsearch 7 and PostgreSQL](https://betterprogramming.pub/running-netflix-conductor-3-in-docker-using-elasticsearch-7-and-postgresql-b415988dd74a) on Medium.
+This repo is a fork that was built to support ES7 and PostgreSQL. 
+However, while trying to improve this repo in this fork, I found out that the community libraries that provide Postgres support are either broken or fail their build tests and effectively are lagging behind the main project. 
+I therefore decided to **abandon** the support for anything comming out of the conductor-community repo as I don't consider it "production grade" artifact.
+This repo does support switching (currently, between v3.9.2 to v3.10.0) condcutor versions and using either docker-compose Redis+ES6 or memory+w/o indexing. 
+Additionally, I've patched the conductor Dockerfile so that it would use the Adoptium JDK/JRE 11 base images, unlike the original Dockerfile that uses deprecated open-jdk/jre images.
 
 ### Component versions
 
@@ -31,7 +32,7 @@ From the root directory:
 
    `run-local-redis` runs Conductor against your local instance of Redis6. On the Redis6 instance
 
-The files `docker-compose.yaml` and `docker-compose-redis.yaml` define the required environment variables to connect to Elasticsearch and PostgreSQL.
+The files `docker-compose.yaml` and `docker-compose-redis.yaml` define the required environment variables to connect to Elasticsearch and Redis.
 
 `Ctrl+c` will exit docker compose.
 
