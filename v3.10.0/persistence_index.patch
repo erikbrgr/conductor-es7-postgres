@@ -1,5 +1,5 @@
 diff --git a/docker/server/Dockerfile b/docker/server/Dockerfile
-index 15a6d6e..e5ba166 100644
+index 15a6d6e..3f176b6 100644
 --- a/docker/server/Dockerfile
 +++ b/docker/server/Dockerfile
 @@ -5,7 +5,7 @@
@@ -7,7 +7,7 @@ index 15a6d6e..e5ba166 100644
  # 0. Builder stage
  # ===========================================================================================================
 -FROM openjdk:11-jdk AS builder
-+FROM eclipse-temurin:11-jdk-alpine AS builder
++FROM eclipse-temurin:11-jdk-focal AS builder
  
  LABEL maintainer="Netflix OSS <conductor@netflix.com>"
  
@@ -16,7 +16,7 @@ index 15a6d6e..e5ba166 100644
  # 1. Bin stage
  # ===========================================================================================================
 -FROM openjdk:11-jre
-+FROM eclipse-temurin:11-jre-alpine
++FROM eclipse-temurin:11-jre-focal
  
  LABEL maintainer="Netflix OSS <conductor@netflix.com>"
  
