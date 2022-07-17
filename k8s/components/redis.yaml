@@ -65,4 +65,4 @@ metadata:
   name: redis-secret 
 type: Opaque
 data:
-  db_password: Tm90QVBhc3NXb3JkUmVhbGx5Cg==
+  db_password: Tm90QVBhc3NXb3JkUmVhbGx5

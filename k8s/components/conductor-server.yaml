@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: conductor-server
-          image: conductor-server
+          image: 242346083784.dkr.ecr.us-east-1.amazonaws.com/conductor-server-es6-redis:v3.10.0
           resources:
             requests:
               cpu: 2
@@ -25,10 +25,6 @@ spec:
             limits:
               cpu: 2
               memory: 4Gi
-          command:
-            - /bin/bash
-          args:
-            - /app/bootstrap.sh
           env:
             - name: CONFIG_PROP
               value: "config-redis.properties"
@@ -52,8 +48,8 @@ spec:
               name: http
           volumeMounts:
             - name: config-redis
-              mountPath: /props
-              subPath: injected.properties
+              mountPath: /props/injected.properties
+                #subPath: injected.properties
       volumes:
         - name: config-redis 
           configMap:
