@@ -1,0 +1,126 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "conductor-server.fullname" . }}
+    #  namespace: conductor
+  labels:
+    app: conductor-server
+  {{- include "conductor-server.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.conductorServer.replicas }}
+  selector:
+    matchLabels:
+      app: conductor-server
+    {{- include "conductor-server.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        app: conductor-server
+      {{- include "conductor-server.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+      - name: conductor-server
+        image: {{ .Values.conductorServer.conductorServer.image.repository }}:{{ .Values.conductorServer.conductorServer.image.tag| default .Chart.AppVersion }}
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+          name: http
+        resources: {{- toYaml .Values.conductorServer.conductorServer.resources | nindent 10 }}
+        env:
+          - name: CONFIG_PROP
+            valueFrom:
+             configMapKeyRef:
+               name: persistency-config
+               key: config_prop 
+          - name: ELASTICSEARCH_URL
+            valueFrom:
+             configMapKeyRef:
+               name: persistency-config
+               key: elasticsearch_url 
+          - name: DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: redis-secret
+                key: db_password 
+          - name: REDIS_ADDRPORT
+            valueFrom:
+              configMapKeyRef:
+                name: persistency-config
+                key: redis_addrport
+          - name: REDIS_MODE
+            valueFrom:
+              configMapKeyRef:
+                name: persistency-config
+                key: redis_mode
+          - name: REDIS_ZONE1
+            valueFrom:
+              configMapKeyRef:
+                name: persistency-config
+                key: redis_zone1
+          - name: REDIS_USE_SSL
+            valueFrom:
+              configMapKeyRef:
+                name: persistency-config
+                key: redis_use_ssl
+        volumeMounts:
+          - name: config-redis
+            mountPath: /props/injected.properties
+      volumes:
+        - name: config-redis 
+          configMap:
+            name: config-redis 
+              
+      restartPolicy: Always
+
+---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: config-redis
+  namespace: conductor
+data:
+  {{ .Values.envs.config_prop }}: |
+    conductor.grpc-server.enabled=false
+    conductor.db.type=##REDIS_MODE##
+    workflow.dynomite.cluster.name=redis
+    conductor.redis.hosts=##REDIS_ADDRPORT##:##REDIS_ZONE1##:##DB_PASSWORD##
+    workflow.namespace.prefix=conductor
+    workflow.namespace.queue.prefix=conductor_queues
+    queues.dynomite.nonQuorum.port=6379
+    workflow.dynomite.cluster.hosts.useSSL=##REDIS_USE_SSL##
+    conductor.indexing.enabled=true
+    conductor.elasticsearch.url=##ELASTICSEARCH_URL##
+    conductor.elasticsearch.indexName=conductor
+    conductor.elasticsearch.clusterHealthColor=yellow
+    conductor.workflow-status-listener.type=stub
+    loadSample=true
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: conductor-server
+  namespace: conductor
+spec:
+  selector:
+    app: conductor-server
+  type: ClusterIP
+  ports:
+    - name: http
+      protocol: TCP
+      port: 8080
+
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: persistency-config
+  namespace: conductor
+data:
+  config_prop: {{ .Values.envs.config_prop | quote }} 
+  elasticsearch_url: {{ .Values.envs.elasticsearch_url | quote }}
+  redis_addrport: {{ .Values.envs.redis_addrport | quote }}
+  redis_mode: {{ .Values.envs.redis_mode | quote }}
+  redis_zone1: {{ .Values.envs.redis_zone1 | quote }}
+  redis_use_ssl: {{ .Values.envs.redis_use_ssl | quote }}

@@ -3,6 +3,6 @@
 # prevent accidentally checking in conductor
 conductor
 conductor-*
-**/values.yaml
+values.yaml
 **/private.yaml
 **/private
