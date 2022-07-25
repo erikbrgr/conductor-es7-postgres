@@ -124,3 +124,12 @@ data:
   redis_mode: {{ .Values.envs.redis_mode | quote }}
   redis_zone1: {{ .Values.envs.redis_zone1 | quote }}
   redis_use_ssl: {{ .Values.envs.redis_use_ssl | quote }}
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: redis-secret 
+type: Opaque
+data:
+  db_password: {{ .Values.secrets.db_password |  b64enc | quote }}
