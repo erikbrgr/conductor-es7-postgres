@@ -21,7 +21,6 @@ conductorServer:
 kubernetesClusterDomain: cluster.local
 
 secrets:
-  db_user: "conductor"
   # Base64 of 'NotAPassWordReally'
   db_password: "Tm90QVBhc3NXb3JkUmVhbGx5"
 
