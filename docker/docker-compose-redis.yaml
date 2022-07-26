@@ -14,9 +14,9 @@ services:
      - REDIS_REPLICATION_MODE=master
 
   conductor-server:
-    image: conductor:server-redis
+    image: conductor-server-es6-redis:v3.10.0
     volumes:
-      - $PWD/docker/config/config-redis.properties:/props/injected.properties
+      - $PWD/config/config-redis.properties:/props/injected.properties
     depends_on:
       - redis
     environment:
@@ -25,7 +25,7 @@ services:
       - DB_PASSWORD=sOmE_sEcUrE_pAsS
       - REDIS_ADDRPORT=redis:6379
       - REDIS_MODE=redis_standalone
-      - REDIS_ZONE1=1
+      - REDIS_ZONE1=us-east-1c
       - REDIS_USE_SSL=false
 
 volumes:
